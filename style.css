@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, 'Segoe UI', 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(145deg, #f0f4fa 0%, #d9e2ef 100%);
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    background: linear-gradient(135deg, #1e2b3c, #2c4c6e);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(2px);
+    border-radius: 2rem;
+    padding: 1.5rem;
+    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+    transition: 0.25s;
+}
+
+.card:hover {
+    background: rgba(255,255,255,0.95);
+    transform: translateY(-5px);
+}
+
+.card-header {
+    display: flex;
+    gap: 0.7rem;
+    border-bottom: 2px solid #cbdde9;
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.2rem;
+}
+
+.card-header h2 {
+    font-size: 1.6rem;
+    color: #1f3b4c;
+}
+
+/* Таймер + настройки */
+.timer-settings {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+.setting-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.setting-item label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #2c5a74;
+}
+.setting-item input {
+    padding: 0.4rem;
+    border-radius: 1rem;
+    border: 1px solid #cbdde9;
+    text-align: center;
+}
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: 800;
+    font-family: monospace;
+    text-align: center;
+    background: #1e2f3c;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 3rem;
+    margin: 1rem 0;
+}
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+button {
+    background: #2c5a74;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+button:hover {
+    background: #1d3f52;
+    transform: scale(0.96);
+}
+.btn-reset { background: #a55d3a; }
+.small-btn { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+
+/* Todo */
+.todo-input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.todo-input-group input {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    border: 1px solid #c9dee9;
+    background: #f0f5fa;
+}
+.todo-list {
+    list-style: none;
+    max-height: 250px;
+    overflow-y: auto;
+}
+.todo-item {
+    background: #ffffffc9;
+    margin: 0.4rem 0;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.todo-text {
+    cursor: pointer;
+    flex: 1;
+}
+.todo-text.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+.delete-todo {
+    background: #b1624b;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.7rem;
+}
+
+/* Заметки - увеличенные */
+.notes-area textarea {
+    width: 100%;
+    border-radius: 1.5rem;
+    padding: 0.8rem;
+    border: 1px solid #cbdbe2;
+    background: #fefef7;
+    resize: vertical;
+    min-height: 150px;
+}
+.note-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+/* Календарь */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+.calendar-day {
+    background: #eef2f7;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.1s;
+    font-size: 0.9rem;
+    position: relative;
+}
+.calendar-day.has-event {
+    background: #ffecb3;
+    font-weight: bold;
+}
+.calendar-day.today {
+    border: 2px solid #2c5a74;
+}
+.event-popup {
+    margin-top: 1rem;
+    background: white;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.event-popup input {
+    flex: 1;
+    padding: 0.4rem;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+}
+.selected-date-info {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: #1f3b4c;
+}
+
+/* Погода */
+.weather-info {
+    text-align: center;
+}
+.weather-temp { font-size: 2rem; font-weight: bold; }
+.refresh-weather { margin-top: 0.8rem; }
+
+/* Упражнения (ЗОЖ) */
+.exercise-list {
+    list-style: none;
+    max-height: 250px;
+    overflow-y: auto;
+}
+.exercise-item {
+    background: #e8f0f5;
+    margin: 0.4rem 0;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.exercise-text {
+    cursor: pointer;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.exercise-text input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+.exercise-text span {
+    font-weight: 500;
+}
+.completed-exercise {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+.delete-exercise {
+    background: #b1624b;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.7rem;
+}
+.exercise-stats {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    text-align: center;
+    color: #2c5a74;
+}
+
+/* Футер */
+.footer-note {
+    text-align: center;
+    margin-top: 2.5rem;
+    font-size: 0.8rem;
+    background: rgba(255,255,240,0.6);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.4rem 1.5rem;
+    border-radius: 2rem;
+}
+
+@media (max-width: 700px) {
+    body { padding: 1rem; }
+    .timer-display { font-size: 2.5rem; }
+}

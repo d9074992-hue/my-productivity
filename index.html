@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Личный блокнот + ЗОЖ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>🧠 Личный блокнот + ЗОЖ</h1>
+        <p>Таймер · Задачи · Заметки · Календарь · Погода · Упражнения</p>
+    </div>
+
+    <div class="dashboard">
+        <!-- 1. ТАЙМЕР с настройкой -->
+        <div class="card">1
+            <div class="card-header">
+                <span class="emoji-bg">⏲️</span>
+                <h2>Настраиваемый таймер</h2>
+            </div>
+            <div class="timer-settings">
+                <div class="setting-item">
+                    <label>⏱️ Работа (мин)</label>
+                    <input type="number" id="workMinutes" min="1" max="99" value="25">
+                </div>
+                <div class="setting-item">
+                    <label>☕ Отдых (мин)</label>
+                    <input type="number" id="breakMinutes" min="1" max="99" value="5">
+                </div>
+                <button id="applyTimerSettings" class="small-btn">Применить</button>
+            </div>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="mode-status" id="modeStatus">📘 Работа (25 мин)</div>
+            <div class="timer-controls">
+                <button id="startBtn">▶ Старт</button>
+                <button id="pauseBtn">⏸ Пауза</button>
+                <button id="resetBtn" class="btn-reset">🔄 Сброс</button>
+            </div>
+        </div>
+
+        <!-- 2. ЗАДАЧИ (TODO) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="emoji-bg">✅</span>
+                <h2>Список дел</h2>
+            </div>
+            <div class="todo-input-group">
+                <input type="text" id="todoInput" placeholder="Новая задача ...">
+                <button id="addTodoBtn">➕ Добавить</button>
+            </div>
+            <ul class="todo-list" id="todoListContainer"></ul>
+        </div>
+
+        <!-- 3. ЗАМЕТКИ (увеличенные) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="emoji-bg">📝</span>
+                <h2>Заметки</h2>
+            </div>
+            <div class="notes-area">
+                <textarea id="notesTextarea" rows="6" placeholder="Ваши заметки..."></textarea>
+                <div class="note-actions">
+                    <button id="saveNotesBtn" class="small-btn">💾 Сохранить</button>
+                    <button id="clearNotesBtn" class="small-btn btn-reset">🗑 Очистить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. КАЛЕНДАРЬ СОБЫТИЙ -->
+        <div class="card calendar-card">
+            <div class="card-header">
+                <span class="emoji-bg">📅</span>
+                <h2>Календарь событий</h2>
+            </div>
+            <div class="calendar-header">
+                <button id="prevMonthBtn">◀</button>
+                <span id="monthYearDisplay"></span>
+                <button id="nextMonthBtn">▶</button>
+            </div>
+            <div class="calendar-weekdays">
+                <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+            </div>
+            <div class="calendar-days" id="calendarDays"></div>
+            <div class="event-popup" id="eventPopup" style="display:none;">
+                <input type="text" id="eventText" placeholder="Событие на этот день">
+                <button id="saveEventBtn">Сохранить</button>
+                <button id="closePopupBtn">Отмена</button>
+            </div>
+            <div class="selected-date-info" id="selectedDateInfo"></div>
+        </div>
+
+        <!-- 5. ПОГОДА -->
+        <div class="card">
+            <div class="card-header">
+                <span class="emoji-bg">🌤️</span>
+                <h2>Погода</h2>
+            </div>
+            <div class="weather-info" id="weatherWidget">
+                <div class="weather-location">📍 Определение...</div>
+                <div class="weather-temp">-- °C</div>
+                <div class="weather-desc">---</div>
+                <div>💧 Влажность: --%</div>
+                <div>🍃 Ветер: -- м/с</div>
+                <button id="refreshWeatherBtn" class="refresh-weather">🔄 Обновить</button>
+            </div>
+        </div>
+
+        <!-- 6. УПРАЖНЕНИЯ (ЗОЖ) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="emoji-bg">💪</span>
+                <h2>Здоровье / Упражнения</h2>
+            </div>
+            <div class="todo-input-group">
+                <input type="text" id="exerciseInput" placeholder="Новое упражнение (например, приседания)">
+                <button id="addExerciseBtn">➕ Добавить</button>
+            </div>
+            <ul class="exercise-list" id="exerciseListContainer"></ul>
+            <div class="exercise-stats" id="exerciseStats"></div>
+        </div>
+    </div>
+    <div class="footer-note">
+        🧩 Все данные (задачи, заметки, события, упражнения) сохраняются локально.
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
