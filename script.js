@@ -1,4 +1,62 @@
-// ================== 1. НАСТРАИВАЕМЫЙ ТАЙМЕР ==================
+// ================== 0. ОБЩИЕ НАСТРОЙКИ ЗВУКА ==================
+let soundEnabled = true; // звук включён по умолчанию
+
+// Создаём панель управления звуком (добавится в верхнюю часть, рядом с таймером)
+if (!document.getElementById('soundToggle')) {
+    const soundControl = document.createElement('div');
+    soundControl.style.display = 'flex';
+    soundControl.style.justifyContent = 'flex-end';
+    soundControl.style.marginBottom = '1rem';
+    soundControl.innerHTML = `
+        <label style="display: flex; align-items: center; gap: 0.5rem; font-size:0.8rem;">
+            <input type="checkbox" id="soundToggle" checked> 🔔 Звук включён
+        </label>
+    `;
+    const firstCard = document.querySelector('.card');
+    if (firstCard) firstCard.parentNode.insertBefore(soundControl, firstCard);
+    document.getElementById('soundToggle').addEventListener('change', (e) => {
+        soundEnabled = e.target.checked;
+    });
+}
+
+// Функция воспроизведения звука "будильник" (три коротких гудка)
+function playAlarmSound() {
+    if (!soundEnabled) return;
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        for (let i = 0; i < 3; i++) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 880; // нота Ля
+            gain.gain.value = 0.3;     // средняя громкость
+            osc.start(now + i * 0.6);
+            gain.gain.exponentialRampToValueAtTime(0.00001, now + i * 0.6 + 0.4);
+            osc.stop(now + i * 0.6 + 0.4);
+        }
+    } catch(e) { console.log('Ошибка звука', e); }
+}
+
+// Короткий звук для переключения режимов (если нужен)
+function playShortBeep() {
+    if (!soundEnabled) return;
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = 660;
+        gain.gain.value = 0.2;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+        osc.stop(audioCtx.currentTime + 0.3);
+    } catch(e) {}
+}
+
+// ================== 1. ТАЙМЕР С УВЕДОМЛЕНИЯМИ И ЗВУКОМ ==================
 let timerInterval = null;
 let currentSeconds = 25 * 60;
 let isWorkMode = true;
@@ -14,24 +72,26 @@ const workInput = document.getElementById('workMinutes');
 const breakInput = document.getElementById('breakMinutes');
 const applySettingsBtn = document.getElementById('applyTimerSettings');
 
+// Запрос разрешения на уведомления
+if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+    Notification.requestPermission();
+}
+
+function showNotification(title, body) {
+    if (Notification.permission === 'granted') {
+        new Notification(title, { body: body, icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998590.png' });
+    }
+}
+
 function updateTimerUI() {
     const mins = Math.floor(currentSeconds / 60);
     const secs = currentSeconds % 60;
     timerDisplay.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
     if (isWorkMode) {
-        modeStatus.innerHTML = `⏱️ Работа (осталось ${mins}:${secs.toString().padStart(2,'0')})`;
+        modeStatus.innerHTML = `🍅 Работа (осталось ${mins}:${secs.toString().padStart(2,'0')})`;
     } else {
         modeStatus.innerHTML = `☕ Отдых (осталось ${mins}:${secs.toString().padStart(2,'0')})`;
     }
-}
-
-function setTimerFromSettings() {
-    if (isWorkMode) {
-        currentSeconds = workMins * 60;
-    } else {
-        currentSeconds = breakMins * 60;
-    }
-    updateTimerUI();
 }
 
 function applySettings() {
@@ -56,26 +116,15 @@ function switchMode() {
     if (isWorkMode) {
         isWorkMode = false;
         currentSeconds = breakMins * 60;
+        showNotification('🍅 Перерыв!', `Отдых ${breakMins} минут. Сделайте разминку.`);
+        playAlarmSound(); // звук будильника при окончании работы
     } else {
         isWorkMode = true;
         currentSeconds = workMins * 60;
+        showNotification('⏰ Работа!', `Начните новую сессию на ${workMins} минут.`);
+        playAlarmSound(); // звук будильника при окончании отдыха
     }
     updateTimerUI();
-    if (Notification.permission === "granted") {
-        new Notification(isWorkMode ? "⏱️ Время работать!" : "🎉 Перерыв!");
-    } else if (Notification.permission !== "denied") Notification.requestPermission();
-    try {
-        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.value = 880;
-        gain.gain.value = 0.2;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.8);
-        osc.stop(audioCtx.currentTime + 0.8);
-    } catch(e) {}
 }
 
 function tickTimer() {
@@ -157,7 +206,7 @@ saveNotesBtn.onclick = saveNotes;
 clearNotesBtn.onclick = clearNotes;
 loadNotes();
 
-// ================== 4. КАЛЕНДАРЬ С СОБЫТИЯМИ ==================
+// ================== 4. КАЛЕНДАРЬ ==================
 let currentDate = new Date();
 let currentYear = currentDate.getFullYear();
 let currentMonth = currentDate.getMonth();
@@ -279,7 +328,7 @@ function getLocationAndWeather() {
 refreshWeather.onclick = getLocationAndWeather;
 getLocationAndWeather();
 
-// ================== 6. УПРАЖНЕНИЯ (ЗОЖ) ==================
+// ================== 6. УПРАЖНЕНИЯ ==================
 let exercises = [];
 
 const exerciseInput = document.getElementById('exerciseInput');
@@ -347,3 +396,41 @@ exerciseInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addExercise();
 });
 loadExercises();
+
+// ================== 7. НАПОМИНАНИЕ ПО ВРЕМЕНИ (БУДИЛЬНИК) ==================
+let alarmTimeout = null;
+
+function checkAlarm() {
+    const alarmTimeInput = document.getElementById('alarmTimeInput');
+    if (!alarmTimeInput) return;
+    const [hours, minutes] = alarmTimeInput.value.split(':').map(Number);
+    const now = new Date();
+    let alarmDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+    if (alarmDate <= now) {
+        alarmDate.setDate(alarmDate.getDate() + 1);
+    }
+    const msUntilAlarm = alarmDate - now;
+    if (alarmTimeout) clearTimeout(alarmTimeout);
+    alarmTimeout = setTimeout(() => {
+        showNotification('⏰ Напоминание!', `Сейчас ${alarmTimeInput.value}. Пора заняться делами или сделать упражнения.`);
+        playAlarmSound(); // звук будильника
+        const statusDiv = document.getElementById('alarmStatus');
+        if (statusDiv) statusDiv.innerHTML = `✅ Напоминание на ${alarmTimeInput.value} сработало! Звук включён.`;
+    }, msUntilAlarm);
+    const statusDiv = document.getElementById('alarmStatus');
+    const minsLeft = Math.floor(msUntilAlarm / 60000);
+    if (statusDiv) statusDiv.innerHTML = `⏳ Напоминание установлено на ${alarmTimeInput.value}. Осталось: ${minsLeft} мин.`;
+}
+
+function setAlarm() {
+    if (alarmTimeout) clearTimeout(alarmTimeout);
+    checkAlarm();
+}
+
+const setAlarmBtn = document.getElementById('setAlarmBtn');
+if (setAlarmBtn) setAlarmBtn.addEventListener('click', setAlarm);
+
+// Если на странице уже есть блок с alarmTimeInput (из index.html), то сразу показываем статус
+if (document.getElementById('alarmTimeInput')) {
+    // можно сразу установить напоминание, но лучше не автоматически, только по кнопке
+}
