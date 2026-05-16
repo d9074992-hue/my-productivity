@@ -10,12 +10,12 @@
 <div class="container">
     <div class="hero">
         <h1>🧠 Личный блокнот + ЗОЖ</h1>
-        <p>Таймер · Задачи · Заметки · Календарь · Погода · Упражнения</p>
+        <p>Таймер · Задачи · Заметки · Календарь · Погода · Упражнения · Напоминания</p>
     </div>
 
     <div class="dashboard">
-        <!-- 1. ТАЙМЕР с настройкой -->
-        <div class="card">1
+        <!-- 1. ТАЙМЕР -->
+        <div class="card">
             <div class="card-header">
                 <span class="emoji-bg">⏲️</span>
                 <h2>Настраиваемый таймер</h2>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <!-- 2. ЗАДАЧИ (TODO) -->
+        <!-- 2. ЗАДАЧИ -->
         <div class="card">
             <div class="card-header">
                 <span class="emoji-bg">✅</span>
@@ -53,7 +53,7 @@
             <ul class="todo-list" id="todoListContainer"></ul>
         </div>
 
-        <!-- 3. ЗАМЕТКИ (увеличенные) -->
+        <!-- 3. ЗАМЕТКИ -->
         <div class="card">
             <div class="card-header">
                 <span class="emoji-bg">📝</span>
@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <!-- 4. КАЛЕНДАРЬ СОБЫТИЙ -->
+        <!-- 4. КАЛЕНДАРЬ -->
         <div class="card calendar-card">
             <div class="card-header">
                 <span class="emoji-bg">📅</span>
@@ -107,7 +107,7 @@
             </div>
         </div>
 
-        <!-- 6. УПРАЖНЕНИЯ (ЗОЖ) -->
+        <!-- 6. УПРАЖНЕНИЯ -->
         <div class="card">
             <div class="card-header">
                 <span class="emoji-bg">💪</span>
@@ -120,12 +120,28 @@
             <ul class="exercise-list" id="exerciseListContainer"></ul>
             <div class="exercise-stats" id="exerciseStats"></div>
         </div>
+
+        <!-- 7. НАПОМИНАНИЕ ПО ВРЕМЕНИ (НОВЫЙ БЛОК) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="emoji-bg">⏰</span>
+                <h2>Напоминание по времени</h2>
+            </div>
+            <div class="timer-settings">
+                <div class="setting-item">
+                    <label>Время (ЧЧ:ММ)</label>
+                    <input type="time" id="alarmTimeInput" value="10:00">
+                </div>
+                <button id="setAlarmBtn" class="small-btn">Установить напоминание</button>
+            </div>
+            <div id="alarmStatus" style="font-size:0.8rem; text-align:center; margin-top:0.5rem;"></div>
+        </div>
     </div>
     <div class="footer-note">
         🧩 Все данные (задачи, заметки, события, упражнения) сохраняются локально.
+        <br>🔔 Разрешите уведомления в браузере, чтобы таймер и напоминания работали.
     </div>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
